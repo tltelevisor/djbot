@@ -16,19 +16,30 @@
 </style>
 
 
-<div style="display: flex; align-items: center;">
-    <form id="djauth" action="{% url 'rqst_tlg' %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="token" value={{token}}>
-        <input type="hidden" name="bot" value={{bot}}>
-        <button type="submit" class="custButton">Войти через Телеграм</button>
-    </form>
-    <div style="display: flex; align-items: center; padding: 10px;">
-        <div id="loader" class="answ-hidden" style="color: #ecaa67;">Ждём ответ...</div>
+<div style="margin: 1px auto 1px; width: 40%;">
+    <div style="display: flex; align-items: center; padding: 10px; font-family: Arial, sans-serif; font-size: 14px;">
+        <form id="djauth" action="{% url 'rqst_tlg' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="token" value={{token}}>
+            <input type="hidden" name="bot" value={{bot}}>
+            <button type="submit" class="custButton">Войти через Telegram</button>
+        </form>
+        <div style="display: flex; align-items: center; padding: 10px;">
+            <div id="loader" class="answ-hidden"
+                style="color: #ecaa67; font-family: Arial, sans-serif; font-size: 14px;">
+                Ждём ответ...</div>
+        </div>
     </div>
 </div>
+
+
+
+<div style="padding: 1em; background-color: rgb(233, 135, 135); width:100%; height:600px;">
+    <iframe src="{{site}}" width="100%" height="600px" style="border:none;"></iframe>
+</div>
+
 <script>
-    //Ожидание загрузки
+    // Индикатор ожидания загрузки
     function toggleLoader() {
         const loader = document.getElementById("loader")
         loader.classList.toggle("answ-hidden")
@@ -43,16 +54,34 @@
         const url_Dj = "/rqst_tlg/";
         const url_Tg = "https://t.me/{{bot}}?start={{token}}";
 
+        // Открываем Telegram в новой вкладке
         window.open(url_Tg, "_blank");
+
+        // Открываем Telegram нашем окне
+        // window.open(url_Tg, "_self");
+
+
 
         fetch(url_Dj, {
             method: "POST",
             body: formData,
         })
             .then(response => response.json())
+            // Подробный обработчик ошибок избыточен, так как
+            // авторизация обеспечивается Django, поэтому вызов при любом исходе один - 
+            // начальной страницы
             .then(data => {
                 if (data["error"] === "0") {
-                    window.location.href = "/";
+                    // Вариант, когда окно авторизации перекрывается окном вызова Telegram,
+                    // а после авторизации в Telegram оно обновляется в авторизованном режиме
+                    // window.location.href = "/";
+
+                    // Вариант, когда окна Telegram и авторизованного сайта открыываются последовательно
+                    // (наиболее наглядно как работает функционал). 
+                    // Стартовое окно с предложением авторизоваться закрытвается
+                    window.open("/")
+                    window.close()
+
                 } else {
                     console.error("Error:", data["error"]);
                     window.location.href = "/";
@@ -62,6 +91,7 @@
                 console.error("Error:", error);
                 window.location.href = "/";
             });
+        // Переключать индикатор в невидимое положение не надо, происходит обновление окон
         // toggleLoader()
     });
 

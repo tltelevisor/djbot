@@ -1,0 +1,14 @@
+#/etc/systemd/system/tlgbot.service
+[Unit]
+Description=[Telegaram-bot service]
+
+[Service]
+Type=simple
+User=max
+WorkingDirectory=/home/max/djbot/tgbot
+ExecStart=/home/max/djbot/tgbot/tgbot.sh
+UMask=000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

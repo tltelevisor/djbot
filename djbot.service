@@ -1,0 +1,14 @@
+#/etc/systemd/system/djbot.service
+[Unit]
+Description=[Django-Telegaram authorisation service]
+
+[Service]
+Type=simple
+User=max
+WorkingDirectory=/home/max/djbot/
+ExecStart=/home/max/djbot/djbot.sh
+UMask=000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
