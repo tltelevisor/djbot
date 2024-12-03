@@ -1,0 +1,140 @@
+<style>
+    a {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        color: #000000;
+    }
+
+    a.text:active a.text:hover a.text {
+        text-decoration: none;
+        color: #666;
+    }
+
+    .custom-nav-item {
+        padding: 10px 10px;
+        text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        display: block;
+        width: 200px;
+        transition: 0.3s;
+        border-radius: 7px;
+        margin-left: 10px;
+        transition: color 0.3s ease;
+    }
+
+    .custom-nav-item:hover {
+        background-color: #dddddd;
+    }
+
+    /* Активный элемент */
+    .custom-nav-item.active {
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .answ-hidden {
+
+        display: none;
+    }
+</style>
+
+
+<!-- <a id="askgpt" href="javascript:void(0);" class="custom-nav-item" onclick="askTgDj({{token}})" -->
+<a id="askgpt" href="javascript:void(0);" class="custom-nav-item" onclick="askTgDj('{{bot}}','{{token}}')"
+    style="padding: 10px 0px;">
+    Войти через Телеграм
+</a>
+<p></p>
+<div id="loader" class="answ-hidden" style="color: #ecaa67;">Ждём ответ...</div>
+
+<p></p>
+<button type="submit">Войти через Телеграм</button>
+<p></p>
+
+<form id="djauth" action="{% url 'rqst_tlg' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="token" value={{token}}>
+    <input type="hidden" name="bot" value={{bot}}>
+    <button type="submit">Войти через Телеграм токен form</button>
+</form>
+
+
+<script>
+    //Ожидание загрузки
+    function toggleLoader() {
+        const loader = document.getElementById('loader')
+        loader.classList.toggle('answ-hidden')
+    }
+
+
+    //Запросы в Telegram и на Django
+    /*
+        async function askTgDj(bot, token) {
+            toggleLoader()
+            const url_Dj = '/rqst_tlg/';
+            // const url_s = "{% url 'rqst_tlg' %}";
+            const url_Tg = 'https://t.me/{{bot}}?start={{token}}';
+            console.log(url_Dj)
+            console.log(url_Tg)
+    
+            // fetch(url_Tg, {
+            //     method: "GET",
+            // })
+    
+            window.open(url_Tg, '_blank');
+    
+            send_json = JSON.stringify({ 'token': token })
+    
+            await fetch(url_Dj, {
+                method: 'POST',
+                body: send_json,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                },
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data) location.reload()
+                }
+                )
+            //
+    }
+    */
+
+
+    document.getElementById("djauth").addEventListener("submit", function (e) {
+        e.preventDefault();
+        toggleLoader()
+
+        const formData = new FormData(djauth);
+        // const token = formData.get("token")
+        // const bot = formData.get("bot")
+        // console.log(token)
+        // console.log(bot)
+        const url_Dj = '/rqst_tlg/';
+        const url_Tg = 'https://t.me/{{bot}}?start={{token}}';
+
+        window.open(url_Tg, '_blank');
+
+        fetch(url_Dj, {
+            method: 'POST',
+            body: formData,
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data['error'] === '0') {
+                    window.location.href = '/';
+                } else {
+                    console.error('Error:', data['error']);
+                    window.location.href = '/';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.href = '/';
+            });
+        toggleLoader()
+    });
+    
+</script>
