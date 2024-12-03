@@ -1,5 +1,26 @@
-<p>Вы авторизованы</p>
+<style>
+    .custButton {
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 7px;
+        border: none;
+    }
 
-<button onclick="location.href={% url 'logout' %}">
+    .custButton:hover {
+        background-color: #dddddd;
+    }
+
+    .answ-hidden {
+        display: none;
+    }
+</style>
+
+<div style="display: flex; align-items: center;">
+<button onclick="location.href={% url 'logout' %}" class="custButton">
     Выйти
 </button>
+
+<div style="display: flex; align-items: center; padding: 10px;">
+    <div>Вы авторизованы</div>
+</div>
+</div>
