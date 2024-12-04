@@ -1,4 +1,4 @@
-BOT_TOKEN = '7405884297:AAH9zFadT60qp4f8pu_Nb3QlzUMsydxPlps' #Tgstat777Bot
+BOT_TOKEN = '--------' #Tgstat777Bot
 TELEGRAM_BOT_USERNAME = 'Tgstat777Bot'
 SITE_TO_AUTH = "https://tgstat.ru/"
 SFX_SITE = "@tgstat.ru"
