@@ -37,6 +37,7 @@ async def cmd_start(msg: types.Message):
             sql = (f"""INSERT INTO djauth_user (is_superuser,is_staff, is_active, date_joined,username,first_name,last_name,idtlg,email,token,password)
                         VALUES (1,1,1,'{datetime.now(timezone.utc)}','{username}','{msg.from_user.first_name}','{msg.from_user.last_name}','{msg.from_user.id}',
                         '{str(msg.from_user.id)+SFX_SITE}','{token}','{token}');""")
+
             cur.execute(sql)
             conn.commit()
             conn.close()

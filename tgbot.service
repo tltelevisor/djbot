@@ -6,7 +6,7 @@ Description=[Telegaram-bot service]
 Type=simple
 User=max
 WorkingDirectory=/home/max/djbot/tgbot
-ExecStart=/home/max/djbot/tgbot/tgbot.sh
+ExecStart=/home/max/djbot/tgbot.sh
 UMask=000
 Restart=always
 
